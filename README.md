@@ -56,11 +56,15 @@ DB_PASSWORD=
 # 5. Generate app key
 php artisan key:generate
 
-# 6. Run migrations + seeders
-php artisan migrate --seed
+# 6. Run migrations
+php artisan migrate
 
-# 7. Start Laravel server
-php artisan serve
+# 7. Run seeders
+php artisan db:seed --class=AdminUserSeerder
+php artisan db:seed --class=PropertySeeder
+
+# 8. Base Url
+http://localhost/"{your-directory}"/property-test-backend/api/
 ```
 
 ---
