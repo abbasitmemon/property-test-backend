@@ -3,14 +3,8 @@
 namespace App\Services;
 
 use App\Models\Availability;
-use App\Models\Category;
 
-
-use App\Models\User;
 use App\Services\Common\BaseService;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Mockery\Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class JsonResponseService
@@ -18,9 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AvailabilityService extends BaseService
 {
-    public function index($request)
+    public function index($property_id)
     {
-        $properties = Availability::with('property')
+        $properties = Availability::where('property_id', $property_id)->with('property')
             ->orderBy('id', 'desc')
             ->paginate($this->pagination);
         return $properties;
@@ -34,12 +28,11 @@ class AvailabilityService extends BaseService
         return $availability;
     }
 
-    public function update($request, $id)
+    public function update($request, $availability)
     {
-        $Availability = Availability::findOrFail($id);
         $data = $request->validated();
-        $Availability->update($data);
-        return $Availability;
+        $availability->update($data);
+        return $availability;
     }
 
     public function destroy($id)

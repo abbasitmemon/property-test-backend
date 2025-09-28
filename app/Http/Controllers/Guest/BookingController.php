@@ -23,7 +23,8 @@ class BookingController extends MainApiController
     {
         $booking = $this->bookingService->store($request);
         return $this->response->success(
-            new BookingResource($booking)
+            new BookingResource($booking),
+            201
         );
     }
 }

@@ -29,13 +29,16 @@ Route::prefix('admin')->group(function () {
         Route::put('properties/{property}', [PropertyController::class, 'update']);
         Route::get('properties/{property}', [PropertyController::class, 'show']);
         Route::delete('properties/{property}', [PropertyController::class, 'destroy']);
+        Route::get('properties/{property_id}/availability', [AvailabilityController::class, 'index']);
+
 
         // Availability Module
-        Route::get('availability/{property_id}', [AvailabilityController::class, 'index']);
         Route::post('availability', [AvailabilityController::class, 'store']);
+        Route::put('availability/{availability}', [AvailabilityController::class, 'update']);
 
         // Booking Module
         Route::get('bookings',      [BookingController::class, 'index']);
+        Route::get('bookings/{booking}',      [BookingController::class, 'view']);
         Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus']);
     });
 });

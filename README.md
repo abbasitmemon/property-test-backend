@@ -5,6 +5,14 @@ It supports **authentication, role-based access, availability checks, booking re
 
 ---
 
+### Centralized Exception Handling
+
+We are using a custom exception handler located in:
+
+-   All exceptions are managed in this file.
+-   No need to add `try/catch` blocks in every controller or service method.
+-   The handler ensures consistent JSON error responses for APIs.
+
 ## 🚀 Features
 
 -   **Admin Panel APIs**
@@ -60,8 +68,7 @@ php artisan key:generate
 php artisan migrate
 
 # 7. Run seeders
-php artisan db:seed --class=AdminUserSeerder
-php artisan db:seed --class=PropertySeeder
+php artisan db:seed
 
 # 8. Base Url
 http://localhost/"{your-directory}"/property-test-backend/api/

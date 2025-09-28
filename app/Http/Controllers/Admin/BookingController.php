@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainApiController;
 use App\Http\Requests\Booking\UpdateBookingStatusRequest;
 use App\Http\Resources\Booking\BookingResource;
@@ -25,6 +24,12 @@ class BookingController extends MainApiController
         $bookings = $this->bookingService->index($request);
         return $this->response->success(
             BookingResource::collection($bookings)
+        );
+    }
+    public function view(Booking $booking)
+    {
+        return $this->response->success(
+            new BookingResource($booking->load('property'))
         );
     }
     public function updateStatus(UpdateBookingStatusRequest $request, Booking $booking)

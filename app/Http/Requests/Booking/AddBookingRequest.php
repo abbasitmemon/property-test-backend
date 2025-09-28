@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Booking;
 
+use App\Models\Availability;
 use App\Models\Booking;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,20 +27,35 @@ class AddBookingRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $exists = Booking::where('property_id', $this->property_id)
-                ->where('status', '!=', 'rejected') // ignore rejected bookings
-                ->where(function ($q) {
-                    $q->whereBetween('start_date', [$this->start_date, $this->end_date])
-                        ->orWhereBetween('end_date', [$this->start_date, $this->end_date])
-                        ->orWhere(function ($q) {
-                            $q->where('start_date', '<=', $this->start_date)
-                                ->where('end_date', '>=', $this->end_date);
+            $propertyId = $this->property_id;
+            $startDate = $this->start_date;
+            $endDate = $this->end_date;
+
+            // Check for conflicting bookings
+            $conflict = Booking::where('property_id', $propertyId)
+                ->where('status', '!=', 'rejected')
+                ->where(function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween('start_date', [$startDate, $endDate])
+                        ->orWhereBetween('end_date', [$startDate, $endDate])
+                        ->orWhere(function ($q) use ($startDate, $endDate) {
+                            $q->where('start_date', '<=', $startDate)
+                                ->where('end_date', '>=', $endDate);
                         });
                 })
                 ->exists();
 
-            if ($exists) {
+            if ($conflict) {
                 $validator->errors()->add('start_date', 'This property is already booked for the selected dates.');
+            }
+
+            // Check if the property is available for the requested dates
+            $available = Availability::where('property_id', $propertyId)
+                ->where('start_date', '<=', $startDate)
+                ->where('end_date', '>=', $endDate)
+                ->exists();
+
+            if (! $available) {
+                $validator->errors()->add('start_date', 'This property is not available for the selected dates.');
             }
         });
     }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainApiController;
 use App\Http\Requests\Property\AddPropertyRequest;
 use App\Http\Requests\Property\UpdatePropertyRequest;
@@ -41,7 +40,8 @@ class PropertyController extends MainApiController
     {
         $property = $this->propertyService->store($request);
         return $this->response->success(
-            new PropertyResource($property)
+            new PropertyResource($property),
+            201
         );
     }
 

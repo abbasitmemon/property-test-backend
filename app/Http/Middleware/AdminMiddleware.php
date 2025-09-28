@@ -2,12 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Validation\ValidationException;
 
 class AdminMiddleware
 {
@@ -19,9 +17,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth()->user();
-        if (!auth()->user()) {
-            $user = User::where('email', $request->email)->first();
-        }
+
         if (!$user || $user->type !== "admin") {
             throw new AuthenticationException(
                 "You're not valid user to access this route"

@@ -3,7 +3,6 @@
 
 namespace App\Services\Common;
 
-use App\Http\Controllers\Controller;
 use App\Services\JsonResponseService;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,5 +33,4 @@ abstract class BaseService
     {
         return $this->response->fail([], 400, Response::HTTP_NOT_FOUND);
     }
-
 }

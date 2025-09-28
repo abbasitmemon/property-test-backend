@@ -2,13 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Category;
 use App\Models\Property;
-use App\Models\User;
 use App\Services\Common\BaseService;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Mockery\Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class JsonResponseService
@@ -28,6 +23,7 @@ class PropertyService extends BaseService
     {
         $data = $request->validated();
         $data['created_by'] = auth()->id();
+        $data['status'] = $data['status'] ?? 'pending';
         $property = Property::create($data);
         return $property;
     }
